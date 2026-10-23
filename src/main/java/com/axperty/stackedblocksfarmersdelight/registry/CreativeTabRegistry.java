@@ -1,18 +1,19 @@
 package com.axperty.stackedblocksfarmersdelight.registry;
 
-import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import com.axperty.stackedblocksfarmersdelight.StackedBlocksFarmersDelight;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import com.axperty.stackedblocksfarmersdelight.StackedBlocksFarmersDelight;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CreativeTabRegistry {
-    public static final CreativeModeTab STACKEDBLOCKSFARMERSDELIGHT_ITEMGROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            Identifier.tryParse(StackedBlocksFarmersDelight.MOD_ID + ":" + "stackedblocksfarmersdelight_itemgroup"),
-            FabricCreativeModeTab.builder()
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, StackedBlocksFarmersDelight.MOD_ID);
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> STACKEDBLOCKSFARMERSDELIGHT_ITEMGROUP = TABS.register("stackedblocksfarmersdelight_itemgroup",
+            () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.stackedblocksfarmersdelight"))
                     .icon(() -> new ItemStack(BlockRegistry.STACKED_RICH_SOIL))
                     .displayItems((displayContext, entries) -> {
@@ -91,5 +92,7 @@ public class CreativeTabRegistry {
                     })
                     .build());
 
-    public static void registerItemGroups() {}
+    public static void register(IEventBus modBus) {
+        TABS.register(modBus);
+    }
 }
